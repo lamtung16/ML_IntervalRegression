@@ -1,4 +1,4 @@
-# Interval Regression
+# Ensemble method in Interval Regression
 
 ## Overview
 
@@ -36,19 +36,66 @@ The proposed method enhances interval regression using a multi-layer perceptron 
 
 2. **Model Architecture:**
    - Implementing a multi-layer perceptron (MLP) to capture complex relationships between features and the target intervals.
-   - The architecture allows for greater flexibility and capacity compared to linear or tree-based methods.
 
 3. **Training Strategy:**
    - The MLP is trained by minimizing the squared hinge loss, which is specifically tailored for interval regression tasks.
-   - The loss function encourages the model to not only intersect with the intervals but also to maintain a maximum margin from the interval boundaries.
 
 4. **Performance:** 
    - Preliminary results indicate that this approach outperforms traditional methods, especially in cases with complex data patterns where linear or tree-based methods may fall short.
+
+## Implementation
+- **Linear Models:** Utilizing the R package [penaltyLearning](https://cran.r-project.org/web/packages/penaltyLearning/index.html)
+  - **Without Regularization:** Applies the Max Margin Interval Regression model, incorporating all possible features.
+  - **L1 Regularization:** Uses the Max Margin Interval Regression model with L1 regularization. The L1 regularization parameter (`L1_reg`) starts at 0.001 and is progressively multiplied by 1.2 until no features are selected. Cross-validation is employed to determine the optimal `L1_reg` value from the training data.
+  
+- **MMIT (Max Margin Interval Trees):** Implemented using the R package [mmit](https://github.com/aldro61/mmit)
+  - Cross-validation (`cv = 2`) is used to select the best hyperparameters for the tree. The hyperparameter lists include:
+    - `max_depth_list = (1, 2, 3, 5, 7, 10, 20, 50, 100, 200, 500, 1000)`
+    - `min_sample_list = (2, 5, 10, 30, 50, 100, 300, 500)`
+  
+- **Ensemble (Random Forest + Multi-Layer Perceptron):**
+  - **Feature Selection:**
+    - 10 Random Forest model is used to determine the mean feature importance.
+    - Features are selected based on thresholds (0.5 and 0.75 are implemented): Features are sorted by importance, and the subset is chosen by selecting from the top until the cumulative importance exceeds the threshold.
+
+<table>
+  <tr>
+    <td>
+      <img src="model/mlp.1L.50percent/feature_importance_figs/baskball.png" alt="" width="500" />
+    </td>
+    <td>
+      <img src="model/mlp.1L.50percent/feature_importance_figs/echomonths.png" alt="" width="500" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="model/mlp.1L.50percent/feature_importance_figs/mbagrade.png" alt="" width="500" />
+    </td>
+    <td>
+      <img src="model/mlp.1L.50percent/feature_importance_figs/pollution.png" alt="" width="500" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="model/mlp.1L.50percent/feature_importance_figs/pyrim.png" alt="" width="500" />
+    </td>
+    <td>
+      <img src="model/mlp.1L.50percent/feature_importance_figs/sleep.png" alt="" width="500" />
+    </td>
+  </tr>
+</table>
+  
+  - **Multi-Layer Perceptron (MLP) Implementation:**
+    - **1 Hidden Layer:** 20 neurons.
+    - **2 Hidden Layers:** 20 neurons in each hidden layer.
+    - **Overfitting Prevention:** The training set is split into sub-training and validation sets. Training is stopped when the validation loss does not decrease for a specified number of epochs (`patience`): 20 epochs for the 1-layer MLP, and 30 epochs for the 2-layer MLP.
 
 ## Future Work
 
 - **Hyperparameter Tuning:** Further exploration into optimal configurations for the MLP, including the number of layers, neurons per layer, and activation functions.
 - **Generalization:** Evaluating the proposed method across different datasets to confirm its robustness and generalizability.
 
-## References
-- Information from [mmit paper](https://arxiv.org/abs/1710.04234).
+## Copyright
+Unless otherwise stated, all content in this repository is licensed under the [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/). You are free to:
+- Share — copy and redistribute the material in any medium or format
+- Adapt — remix, transform, and build upon the material for any purpose, even commercially.
