@@ -55,32 +55,32 @@ The proposed method enhances interval regression using a multi-layer perceptron 
   
 - **Ensemble (Random Forest + Multi-Layer Perceptron):**
   - **Feature Selection:**
-    - 10 Random Forest model is used to determine the mean feature importance.
+    - 10 Random Forest model is used to determine the mean feature importance from only the training data, not the test data.
     - Features are selected based on thresholds (0.5 and 0.75 are implemented): Features are sorted by importance, and the subset is chosen by selecting from the top until the cumulative importance exceeds the threshold.
 
 <table>
   <tr>
     <td>
-      <img src="model/mlp.1L.50percent/feature_importance_figs/baskball.png" alt="" width="500" />
+      <img src="model/mlp.1L.50percent/feature_importance_figs/breasttumor.png" alt="" width="500" />
     </td>
     <td>
-      <img src="model/mlp.1L.50percent/feature_importance_figs/echomonths.png" alt="" width="500" />
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="model/mlp.1L.50percent/feature_importance_figs/mbagrade.png" alt="" width="500" />
-    </td>
-    <td>
-      <img src="model/mlp.1L.50percent/feature_importance_figs/pollution.png" alt="" width="500" />
+      <img src="model/mlp.1L.50percent/feature_importance_figs/cholesterol.png" alt="" width="500" />
     </td>
   </tr>
   <tr>
     <td>
-      <img src="model/mlp.1L.50percent/feature_importance_figs/pyrim.png" alt="" width="500" />
+      <img src="model/mlp.1L.50percent/feature_importance_figs/housing.png" alt="" width="500" />
     </td>
     <td>
-      <img src="model/mlp.1L.50percent/feature_importance_figs/sleep.png" alt="" width="500" />
+      <img src="model/mlp.1L.50percent/feature_importance_figs/pbc.png" alt="" width="500" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="model/mlp.1L.50percent/feature_importance_figs/sensory.png" alt="" width="500" />
+    </td>
+    <td>
+      <img src="model/mlp.1L.50percent/feature_importance_figs/servo.png" alt="" width="500" />
     </td>
   </tr>
 </table>
