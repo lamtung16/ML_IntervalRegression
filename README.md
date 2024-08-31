@@ -61,26 +61,26 @@ The proposed method enhances interval regression using a multi-layer perceptron 
 <table>
   <tr>
     <td>
-      <img src="model/mlp.1L.50percent/feature_importance_figs/breasttumor.png" alt="" width="500" />
+      <img src="model/rf/feature_importance_figs/breasttumor.png" alt="" width="500" />
     </td>
     <td>
-      <img src="model/mlp.1L.50percent/feature_importance_figs/cholesterol.png" alt="" width="500" />
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="model/mlp.1L.50percent/feature_importance_figs/housing.png" alt="" width="500" />
-    </td>
-    <td>
-      <img src="model/mlp.1L.50percent/feature_importance_figs/pbc.png" alt="" width="500" />
+      <img src="model/rf/feature_importance_figs/cholesterol.png" alt="" width="500" />
     </td>
   </tr>
   <tr>
     <td>
-      <img src="model/mlp.1L.50percent/feature_importance_figs/sensory.png" alt="" width="500" />
+      <img src="model/rf/feature_importance_figs/housing.png" alt="" width="500" />
     </td>
     <td>
-      <img src="model/mlp.1L.50percent/feature_importance_figs/servo.png" alt="" width="500" />
+      <img src="model/rf/feature_importance_figs/pbc.png" alt="" width="500" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="model/rf/feature_importance_figs/sensory.png" alt="" width="500" />
+    </td>
+    <td>
+      <img src="model/rf/feature_importance_figs/servo.png" alt="" width="500" />
     </td>
   </tr>
 </table>
