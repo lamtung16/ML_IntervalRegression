@@ -90,6 +90,8 @@ The proposed method enhances interval regression using a multi-layer perceptron 
     - **2 Hidden Layers:** 20 neurons in each hidden layer.
     - **Overfitting Prevention:** The training set is split into sub-training and validation sets. Training is stopped when the validation loss does not decrease for a specified number of epochs (`patience`): 20 epochs for the 1-layer MLP, and 30 epochs for the 2-layer MLP.
 
+![comparison](figures/comparison.png)
+
 ## Future Work
 
 - **Hyperparameter Tuning:** Further exploration into optimal configurations for the MLP, including the number of layers, neurons per layer, and activation functions.
