@@ -77,7 +77,7 @@ The proposed method enhances interval regression using a multi-layer perceptron 
   </tr>
   <tr>
     <td>
-      <img src="model/rf/feature_importance_figs/sensory.png" alt="" width="500" />
+      <img src="model/rf/feature_importance_figs/sleep.png" alt="" width="500" />
     </td>
     <td>
       <img src="model/rf/feature_importance_figs/servo.png" alt="" width="500" />
