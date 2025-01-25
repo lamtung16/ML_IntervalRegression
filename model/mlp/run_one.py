@@ -35,8 +35,8 @@ os.makedirs(f'stats/{dataset}', exist_ok=True)
 
 
 # Early stopping parameters
-patience = 10
-max_epochs = 200
+patience = 100
+max_epochs = 10000
 
 
 # try to use gpu if available
@@ -134,7 +134,7 @@ for train_idx, val_idx in kf.split(features_train):
             val_loss = criterion(val_outputs, torch.tensor(target_train[val_idx], dtype=torch.float32))
         
         # Early stopping
-        if val_loss < best_val_loss:
+        if val_loss <= best_val_loss:
             best_val_loss = val_loss
             best_model_state = model.state_dict()  # Save best model
             patience_counter = 0  # Reset patience counter

@@ -14,7 +14,7 @@ for dataset in datasets:
     
     test_fold = sorted(fold_df['fold'].unique())
     num_layers = [1, 2]
-    layer_size = [1, 2, 4, 8, 16, 32, 64]
+    layer_size = [4, 8]
 
     # Create parameter grid
     combinations = product([dataset], num_layers, layer_size, test_fold)
