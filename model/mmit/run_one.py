@@ -1,6 +1,4 @@
 import pandas as pd
-import torch
-import torch.nn as nn
 import numpy as np
 import random
 import os
@@ -10,8 +8,6 @@ from mmit_functions import mmit
 
 # Set random seed for reproducibility
 random_seed = 42
-torch.manual_seed(random_seed)
-torch.cuda.manual_seed_all(random_seed)
 np.random.seed(random_seed)
 random.seed(random_seed)
 
