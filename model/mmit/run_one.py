@@ -4,7 +4,8 @@ import random
 import os
 import sys
 from sklearn.model_selection import KFold
-from mmit_functions import mmit
+# from mmit_functions import mmit
+from mmit import MaxMarginIntervalTree
 
 # Set random seed for reproducibility
 random_seed = 42
@@ -33,7 +34,7 @@ X_train = features_df.loc[train_indices].values
 X_test = features_df.loc[test_indices].values
 y_train = target_df.loc[train_indices].values
 
-max_depths = [0, 5, 10, 15, 20, 25]
+max_depths = [2, 5, 10, 15, 20, 25]
 min_split_samples = [2, 5, 10, 20, 50]
 kf = KFold(n_splits=5, shuffle=True, random_state=42)
 best_models = []
@@ -44,16 +45,11 @@ for train_idx, val_idx in kf.split(X_train):
     best_hinge_error = float('inf')
     for max_depth in max_depths:
         for min_split_sample in min_split_samples:
-            tree = mmit(max_depth=max_depth, min_split_sample=min_split_sample)
+            tree = MaxMarginIntervalTree(loss='squared_hinge', max_depth=max_depth, min_samples_split=min_split_sample)
             tree.fit(X_subtrain, y_subtrain)
 
-            # Predict on validation set
-            y_val_pred = tree.predict(X_val)
-
             # Compute hinge error
-            y_val_low = y_val[:, 0] + tree.margin_length
-            y_val_up = y_val[:, 1] - tree.margin_length
-            hinge_error = np.sum(tree.hinge_error(y_val_pred, y_val_low, y_val_up))
+            hinge_error = - tree.score(X_val, y_val)
 
             if hinge_error < best_hinge_error:
                 best_hinge_error = hinge_error
