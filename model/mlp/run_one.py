@@ -27,8 +27,8 @@ test_fold = params['test_fold']
 os.makedirs('predictions', exist_ok=True)
 
 # Early stopping parameters
-patience = 100
-max_epochs = 10000
+patience = 10000
+max_epochs = 20000
 
 # Try to use GPU if available
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -46,17 +46,26 @@ class SquaredHingeLoss(nn.Module):
         loss = loss_low + loss_high
         return torch.mean(torch.square(loss))
 
+
 # MLP models
 class MLP(nn.Module):
-    def __init__(self, input_size, layer_sizes):
+    def __init__(self, input_size, layer_sizes, activation_function='ReLU'):
         super(MLP, self).__init__()
         layers = []
         prev_size = input_size
 
+        # Choose activation function based on the hyperparameter
+        if activation_function == 'ReLU':
+            activation_fn = nn.ReLU()
+        elif activation_function == 'Sigmoid':
+            activation_fn = nn.Sigmoid()
+        else:
+            raise ValueError("Activation function must be 'ReLU' or 'Sigmoid'.")
+
         # Create hidden layers
         for size in layer_sizes:
             layers.append(nn.Linear(prev_size, size))
-            layers.append(nn.ReLU())
+            layers.append(activation_fn)
             prev_size = size
 
         # Add output layer
@@ -66,6 +75,7 @@ class MLP(nn.Module):
 
     def forward(self, x):
         return self.model(x)
+
 
 # Load features, target, and fold
 folds_df = pd.read_csv(f'../../data/{dataset}/folds.csv')
@@ -100,46 +110,47 @@ for train_idx, val_idx in kf.split(features_train):
     best_val_loss = float('inf')
 
     for num_layer in [1, 2]:
-        for layer_size in [10, 20]:
-            model = MLP(input_size=features_train.shape[1], layer_sizes=[layer_size] * num_layer).to(device)
-            optimizer = torch.optim.Adam(model.parameters())
-            criterion = SquaredHingeLoss()
-            patience_counter = 0
-            best_model_state = None
-            best_val_loss_model = float('inf')
+        for layer_size in [5, 10, 20]:
+            for activation_function in ['ReLU', 'Sigmoid']:
+                model = MLP(input_size=features_train.shape[1], layer_sizes=[layer_size] * num_layer, activation_function=activation_function).to(device)
+                optimizer = torch.optim.Adam(model.parameters())
+                criterion = SquaredHingeLoss()
+                patience_counter = 0
+                best_model_state = None
+                best_val_loss_model = float('inf')
 
-            for epoch in range(max_epochs):
-                # Training step
-                model.train()
-                optimizer.zero_grad()
-                outputs = model(features_train[train_idx])
-                loss = criterion(outputs, target_train[train_idx])
-                loss.backward()
-                optimizer.step()
+                for epoch in range(max_epochs):
+                    # Training step
+                    model.train()
+                    optimizer.zero_grad()
+                    outputs = model(features_train[train_idx])
+                    loss = criterion(outputs, target_train[train_idx])
+                    loss.backward()
+                    optimizer.step()
 
-                # Validation step
-                model.eval()
-                with torch.no_grad():
-                    val_outputs = model(features_train[val_idx])
-                    val_loss = criterion(val_outputs, target_train[val_idx])
+                    # Validation step
+                    model.eval()
+                    with torch.no_grad():
+                        val_outputs = model(features_train[val_idx])
+                        val_loss = criterion(val_outputs, target_train[val_idx])
 
-                # Early stopping logic
-                if val_loss < best_val_loss_model:
-                    best_val_loss_model = val_loss.item()
-                    patience_counter = 0
-                    best_model_state = model.state_dict()
-                else:
-                    patience_counter += 1
+                    # Early stopping logic
+                    if val_loss.item() < best_val_loss_model:
+                        best_val_loss_model = val_loss.item()
+                        patience_counter = 0
+                        best_model_state = model.state_dict()
+                    else:
+                        patience_counter += 1
 
-                if patience_counter >= patience:
-                    break
+                    if patience_counter >= patience:
+                        break
 
-            if best_model_state:
-                model.load_state_dict(best_model_state)
+                if best_model_state:
+                    model.load_state_dict(best_model_state)
 
-            if best_val_loss_model < best_val_loss:
-                best_val_loss = best_val_loss_model
-                best_model = model
+                if best_val_loss_model < best_val_loss:
+                    best_val_loss = best_val_loss_model
+                    best_model = model
 
     best_models.append(best_model)
 
