@@ -1,2 +1,6 @@
+Windows cmd:
 parallel:       for /L %x in (0,1,779) do start python run_one.py %x
 sequentialy:    for /L %x in (0,1,779) do python run_one.py %x
+
+Linus bash:
+sequentialy:    for x in {0..100..5}; do python run_one.py "$x"; done    // step 5

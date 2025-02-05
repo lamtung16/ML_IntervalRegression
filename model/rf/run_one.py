@@ -26,21 +26,19 @@ class MMIF:
         
         for _ in range(self.n_trees):
             X_bootstrap, y_bootstrap = resample(X, y, n_samples=int(self.sample_ratio * N), replace=True)
-            X_oob, y_oob = np.setdiff1d(X, X_bootstrap), np.setdiff1d(y, y_bootstrap)
+            oob_indices = np.setdiff1d(np.arange(X.shape[0]), np.unique(np.where(X == X_bootstrap)[0]))
+            X_oob = X[oob_indices]
+            y_oob = y[oob_indices]
             
             best_tree, best_score = None, float('-inf')
-            
+            feature_indices = np.random.choice(D, num_features, replace=False)
             for depth in self.max_depth_values:
                 for min_split in self.min_split_samples:
                     tree = MaxMarginIntervalTree(loss='squared_hinge', max_depth=depth, min_samples_split=min_split)
-                    
-                    feature_indices = np.random.choice(D, num_features, replace=False)
                     tree.fit(X_bootstrap[:, feature_indices], y_bootstrap)
-                    
-                    if len(y_oob) > 0:
-                        score = tree.score(X_oob[:, feature_indices], y_oob)
-                        if score > best_score:  # Higher score is better
-                            best_tree, best_score = tree, score
+                    score = tree.score(X_oob[:, feature_indices], y_oob)
+                    if score > best_score:  # Higher score is better
+                        best_tree, best_score = tree, score
             
             self.trees.append((best_tree, feature_indices, -best_score))
 
@@ -49,7 +47,7 @@ class MMIF:
         total_weight = 0
         
         for tree, feature_indices, error in self.trees:
-            weight = 1 / (error + 1e-5)  # Use inverse error as weight
+            weight = 1 / (10*error + 1e-4)  # Use inverse error as weight
             predictions += weight * tree.predict(X[:, feature_indices])
             total_weight += weight
         
