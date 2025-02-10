@@ -7,6 +7,7 @@ import os
 from sklearn.preprocessing import MinMaxScaler
 import sys
 from sklearn.model_selection import KFold
+import copy
 
 # Set random seed for reproducibility
 random_seed = 42
@@ -27,8 +28,8 @@ test_fold = params['test_fold']
 os.makedirs('predictions', exist_ok=True)
 
 # Early stopping parameters
-patience = 10000
-max_epochs = 20000
+patience = 100
+max_epochs = 10000
 
 # Try to use GPU if available
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -138,7 +139,7 @@ for train_idx, val_idx in kf.split(features_train):
                     if val_loss.item() < best_val_loss_model:
                         best_val_loss_model = val_loss.item()
                         patience_counter = 0
-                        best_model_state = model.state_dict()
+                        best_model_state = copy.deepcopy(model.state_dict())
                     else:
                         patience_counter += 1
 
