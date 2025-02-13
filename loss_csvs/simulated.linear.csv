@@ -34,3 +34,13 @@ aft_xgboost,2,0.00360490779271517
 aft_xgboost,3,0.013358452479583283
 aft_xgboost,4,0.0008818610637402176
 aft_xgboost,5,0.000952082255340956
+aft_xgboost_original,1,0.0058564910360498
+aft_xgboost_original,2,nan
+aft_xgboost_original,3,nan
+aft_xgboost_original,4,nan
+aft_xgboost_original,5,nan
+aft_xgboost_extreme,1,0.009279163270789915
+aft_xgboost_extreme,2,0.009259095809947474
+aft_xgboost_extreme,3,0.01320087063746484
+aft_xgboost_extreme,4,0.0
+aft_xgboost_extreme,5,0.004988046755710004
