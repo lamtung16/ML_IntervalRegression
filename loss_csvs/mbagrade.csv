@@ -44,3 +44,8 @@ aft_xgboost_extreme,2,0.010770910438364154
 aft_xgboost_extreme,3,0.0
 aft_xgboost_extreme,4,0.0035465562362592164
 aft_xgboost_extreme,5,0.003318635191583491
+aft_xgboost_sigmoid,1,0.052712170333195876
+aft_xgboost_sigmoid,2,0.0578694303591458
+aft_xgboost_sigmoid,3,0.0005726731794922926
+aft_xgboost_sigmoid,4,0.0126666898400786
+aft_xgboost_sigmoid,5,0.04322144364611715
